@@ -1,77 +1,113 @@
 import { useState } from "react";
-import { generalInfo, educationInfo, experienceInfo } from './data.js';
+// import { generalInfo, educationInfo, experienceInfo } from './data.js';
 
+let educationInfo = [
+    {id: crypto.randomUUID(), schoolName: '', typeOfDegree: '', areaOfStudy: '', yearsAttended: ''},
+    {id: crypto.randomUUID(), schoolName: 'UT', typeOfDegree: 'BS', areaOfStudy: 'Civil', yearsAttended: '2011-2015'},
+    {id: crypto.randomUUID(), schoolName: 'UT2', typeOfDegree: 'BS2', areaOfStudy: 'Civil2', yearsAttended: '2011-2012'},
+];
 
-export default function EducationSection() {
+function EducationInfo({ school }) {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [inputValues, setInputValues] = useState({schoolName: '', typeOfDegree: '', areaOfStudy: '', yearsAttended: ''});
+    const [schoolInputValues, setSchoolInputValues] = useState(school);
 
-    let buttonText = 'Edit';
-    if(activeIndex == 0) buttonText = 'Edit';
-    else buttonText = 'Done';
-    
+
     function toggleActiveIndex() {
         !activeIndex ? (setActiveIndex(1)) : (setActiveIndex(0));
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setInputValues(prevValues => ({...prevValues, [name]: value}));
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setSchoolInputValues(prevValues => ({...prevValues, [name]: value}));
     };
 
-    return (
-        <>
-            <h2>Education</h2>
-            <EducationInfo isActive={activeIndex === 0}>
-                <b>School Name: </b> {inputValues.schoolName} <br />
-                <b>Degree Type: </b> {inputValues.typeOfDegree} <br />
-                <b>Area of Study: </b> {inputValues.areaOfStudy} <br />
-                <b>Years Attended: </b> {inputValues.yearsAttended} <br />
-            </EducationInfo>
+    function updateArray(id, e) {
+        const { name, value } = e.target;
+        const newInputs = schools.map(item => {
+            if (item.id == id) {
+                return {...item, [name]: value}
+            }
+        })
+        setSchools(newInputs)
+    };
 
-            <EducationInfo isActive={activeIndex === 1}>
+
+    if(activeIndex === 0) {
+        return (
+            <section>
+                <b>School Name: </b> {school.schoolName} <br />
+                <b>Degree Type: </b> {school.typeOfDegree} <br />
+                <b>Area of Study: </b> {school.areaOfStudy} <br />
+                <b>Years Attended: </b> {school.yearsAttended} <br />
+
+                <button onClick={() => toggleActiveIndex() }> Edit </button>
+                </section>
+        );
+    } else if(activeIndex === 1) {
+        return (
+            <section>
                 <form className="educationInfoForm" >
                     <label><b>School Name: </b><input 
                         type="text" 
                         name="schoolName"
-                        value={inputValues.schoolName}
+                        value={schoolInputValues.schoolName}
                         onChange={handleInputChange}
                     /></label> <br />
                     
                     <label><b>Degree Type: </b><input 
                         type="text" 
                         name="typeOfDegree"
-                        value={inputValues.typeOfDegree}
+                        value={schoolInputValues.typeOfDegree}
                         onChange={handleInputChange}
                     /></label> <br />
 
                     <label><b>Area of Study: </b><input 
                         type="text" 
                         name="areaOfStudy"
-                        value={inputValues.areaOfStudy}
+                        value={schoolInputValues.areaOfStudy}
                         onChange={handleInputChange}
                     /></label> <br />
 
                     <label><b>Years Attended: </b><input 
                         type="text" 
                         name="yearsAttended"
-                        value={inputValues.yearsAttended}
+                        value={schoolInputValues.yearsAttended}
                         onChange={handleInputChange}
                     /></label> <br />
                 </form>
-            </EducationInfo>
-
-            <button onClick={ () => toggleActiveIndex() }> 
-                {buttonText}
-            </button>
-        </>
-    );
+                <button onClick={ () => (toggleActiveIndex(), updateArray(school.id)) }> Done </button>
+            </section> 
+        );
+    };
 };
 
-function EducationInfo({ children, isActive }) {
+// --------------------------------------------------------------------------
+
+export default function EducationSection() {
+    const [schools, setSchools] = useState(educationInfo);
+
+    // function updateArray(id, e) {
+    //     const { name, value } = e.target;
+    //     const newInputs = schools.map(item => {
+    //         if (item.id == id) {
+    //             return {...item, [name]: value}
+    //         }
+    //     })
+    //     setSchools(newInputs)
+    // }
+
+    const listItems = schools.map(school => 
+        <li key={school.id}>
+            <EducationInfo school={school} />
+            <button onClick={() => {setSchools(schools.filter(s => s.id !== school.id))}}> Delete </button>
+        </li>
+    );
+    
     return (
-        <section>
-            {isActive ? <>{children}</> : ''}
+        <section className='educationSection' >
+            <h2>Education</h2>
+            <ul>{listItems}</ul>
+            <button onClick={() => {setSchools([...schools, {id: crypto.randomUUID(), schoolName: '', typeOfDegree: '', areaOfStudy: '', yearsAttended: ''}])}}> Add </button>
         </section>
     );
 };

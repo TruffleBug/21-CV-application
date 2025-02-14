@@ -8,8 +8,8 @@ export default function CV() {
     return (
         <>
             <h1>CV</h1>
-            <GeneralSection className="generalSection" /> 
-            <EducationSection className='educationSection' />
+            <GeneralSection /> 
+            <EducationSection />
         </>
     )
 }

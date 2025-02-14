@@ -14,13 +14,13 @@ export default function GeneralSection() {
         !activeIndex ? (setActiveIndex(1)) : (setActiveIndex(0));
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
         setInputValues(prevValues => ({...prevValues, [name]: value}));
     };
             
     return (
-        <>
+        <section className="generalSection">
             <h2>General Information</h2>
             <GeneralInfo isActive={activeIndex === 0}>
                 <b>Name: </b> {inputValues.fullName} <br />
@@ -56,7 +56,7 @@ export default function GeneralSection() {
             <button onClick={ () => toggleActiveIndex() }> 
                 {buttonText}
             </button>
-        </>
+        </section>
     );
 };
 
