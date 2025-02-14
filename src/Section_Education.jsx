@@ -3,8 +3,6 @@ import { useState } from "react";
 
 let educationInfo = [
     {id: crypto.randomUUID(), schoolName: '', typeOfDegree: '', areaOfStudy: '', yearsAttended: ''},
-    {id: crypto.randomUUID(), schoolName: 'UT', typeOfDegree: 'BS', areaOfStudy: 'Civil', yearsAttended: '2011-2015'},
-    {id: crypto.randomUUID(), schoolName: 'UT2', typeOfDegree: 'BS2', areaOfStudy: 'Civil2', yearsAttended: '2011-2012'},
 ];
 
 function EducationInfo({ school, updateArray }) {
@@ -61,7 +59,7 @@ function EducationInfo({ school, updateArray }) {
                         name="yearsAttended"
                         value={schoolInputValues.yearsAttended}
                         onChange={handleInputChange}
-                    /></label> <br />
+                    /></label> 
                 </form>
                 <button onClick={ () => (toggleActiveIndex(), updateArray(school.id, schoolInputValues)) }> Done </button>
             </section> 
@@ -83,16 +81,15 @@ export default function EducationSection() {
     const listItems = schools.map(school => 
         <li key={school.id}>
             <EducationInfo 
-                schools={schools}
                 school={school} 
                 updateArray={updateArray}
             />
-            <button onClick={() => {setSchools(schools.filter(s => s.id !== school.id))}}> Delete </button>
+            <button className='deleteButton' onClick={() => {setSchools(schools.filter(s => s.id !== school.id))}}> Delete </button>
         </li>
     );
     
     return (
-        <section className='educationSection' >
+        <section className='educationSection topic' >
             <h2>Education</h2>
             <ul>{listItems}</ul>
             <button onClick={() => {setSchools([...schools, {id: crypto.randomUUID(), schoolName: '', typeOfDegree: '', areaOfStudy: '', yearsAttended: ''}])}}> Add </button>

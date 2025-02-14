@@ -20,7 +20,7 @@ export default function GeneralSection() {
     };
             
     return (
-        <section className="generalSection">
+        <section className="generalSection topic">
             <h2>General Information</h2>
             <GeneralInfo isActive={activeIndex === 0}>
                 <b>Name: </b> {inputValues.fullName} <br />
