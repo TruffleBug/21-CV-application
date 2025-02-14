@@ -20,12 +20,20 @@ function ExperienceInfo({ experience, updateArray }) {
         setExperienceInputValues(prevValues => ({...prevValues, [name]: value}));
     };
 
+    const taskList = [...experience.tasks];
+
     if(activeIndex === 0) {
         return (
             <section>
                 <b>Company: </b> {experience.company} <br />
                 <b>Title: </b> {experience.title} <br />
-                <b>Tasks: </b> {experience.tasks} <br />
+                <b>Tasks: </b> 
+                    <ul>
+                        {taskList.map(task =>
+                            <li key={crypto.randomUUID()}> {task} </li>
+                        )}
+                    </ul>     
+                <br />
                 <b>Years: </b> {experience.years} <br />
 
                 <button onClick={() => toggleActiveIndex() }> Edit </button>
