@@ -7,10 +7,9 @@ let educationInfo = [
     {id: crypto.randomUUID(), schoolName: 'UT2', typeOfDegree: 'BS2', areaOfStudy: 'Civil2', yearsAttended: '2011-2012'},
 ];
 
-function EducationInfo({ school }) {
+function EducationInfo({ school, updateArray }) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [schoolInputValues, setSchoolInputValues] = useState(school);
-
 
     function toggleActiveIndex() {
         !activeIndex ? (setActiveIndex(1)) : (setActiveIndex(0));
@@ -20,17 +19,6 @@ function EducationInfo({ school }) {
         const { name, value } = event.target;
         setSchoolInputValues(prevValues => ({...prevValues, [name]: value}));
     };
-
-    function updateArray(id, e) {
-        const { name, value } = e.target;
-        const newInputs = schools.map(item => {
-            if (item.id == id) {
-                return {...item, [name]: value}
-            }
-        })
-        setSchools(newInputs)
-    };
-
 
     if(activeIndex === 0) {
         return (
@@ -75,7 +63,7 @@ function EducationInfo({ school }) {
                         onChange={handleInputChange}
                     /></label> <br />
                 </form>
-                <button onClick={ () => (toggleActiveIndex(), updateArray(school.id)) }> Done </button>
+                <button onClick={ () => (toggleActiveIndex(), updateArray(school.id, schoolInputValues)) }> Done </button>
             </section> 
         );
     };
@@ -86,19 +74,19 @@ function EducationInfo({ school }) {
 export default function EducationSection() {
     const [schools, setSchools] = useState(educationInfo);
 
-    // function updateArray(id, e) {
-    //     const { name, value } = e.target;
-    //     const newInputs = schools.map(item => {
-    //         if (item.id == id) {
-    //             return {...item, [name]: value}
-    //         }
-    //     })
-    //     setSchools(newInputs)
-    // }
+    function updateArray(schoolId, newValues) {
+        setSchools(schools.map(school => {
+            return school.id === schoolId ? { ...school, ...newValues } : school
+        }));
+    };
 
     const listItems = schools.map(school => 
         <li key={school.id}>
-            <EducationInfo school={school} />
+            <EducationInfo 
+                schools={schools}
+                school={school} 
+                updateArray={updateArray}
+            />
             <button onClick={() => {setSchools(schools.filter(s => s.id !== school.id))}}> Delete </button>
         </li>
     );
